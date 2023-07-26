@@ -1,10 +1,89 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { IoLogoGoogle, IoLogoFacebook } from "react-icons/io";
 
+import { auth, db } from "@/firebase/firebase";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  signInWithPopup,
+  updateProfile,
+} from "firebase/auth";
+import useAuth from "@/Context/authContext";
+import { useRouter } from "next/router";
+import { doc, setDoc } from "firebase/firestore";
+
+import { profileColors } from "@/utils/constant";
+
+const googleProvider = new GoogleAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
+
 const Register = () => {
-  return (
+  const { isLoading, currentUser } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && currentUser) {
+      router.push("/");
+    }
+  }, [isLoading, currentUser]);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const name = e.target[0].value;
+    const email = e.target[1].value;
+    const password = e.target[2].value;
+    const randomColorIndex = Math.floor(Math.random() * profileColors.length);
+    if (name == "" || email == "" || password.length < 7) {
+      return;
+    }
+
+    try {
+      const { user } = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        displayName: name,
+        email,
+        color: profileColors[randomColorIndex],
+      });
+
+      await setDoc(doc(db, "userChats", user.uid), {});
+
+      await updateProfile(user, {
+        displayName: name,
+      });
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const signInWithGoogle = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const signInWithFacebook = async () => {
+    try {
+      await signInWithPopup(auth, facebookProvider);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return isLoading || (!isLoading && currentUser) ? (
+    "Loading..."
+  ) : (
     <div className="h-[100vh] flex justify-center items-center bg-c1">
       <div className="flex items-center flex-col ">
         <div className="text-center">
@@ -14,16 +93,22 @@ const Register = () => {
           </div>
         </div>
         <div className="flex items-center gap-2 w-full mt-10 mb-5">
-          <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]">
+          <div
+            onClick={signInWithGoogle}
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
+          >
             <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
               <IoLogoGoogle size={24} />
-              <span>Login With Google</span>
+              <span>Sign Up With Google</span>
             </div>
           </div>
-          <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]">
+          <div
+            onClick={signInWithFacebook}
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
+          >
             <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
               <IoLogoFacebook size={24} />
-              <span>Login With Facebook</span>
+              <span>Sign Up With Facebook</span>
             </div>
           </div>
         </div>
@@ -33,6 +118,7 @@ const Register = () => {
           <span className="w-5 h-[1px] bg-c3"></span>
         </div>
         <form
+          onSubmit={submitHandler}
           action=""
           className="flex flex-col items-center gap-3 w-[500px] mt-5"
         >
@@ -61,10 +147,10 @@ const Register = () => {
         <div className="flex justify-center gap-1 text-c3 mt-5">
           <span>Already have an account? </span>
           <Link
-            href="/login"
+            href="/sign-in"
             className="font-semibold text-white underline underline-offset-2 cursor-pointer"
           >
-            Login
+            Sign In
           </Link>
         </div>
       </div>

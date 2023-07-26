@@ -8,7 +8,7 @@ const Home = () => {
   const router = useRouter();
   useEffect(() => {
     if ((!isLoading && !currentUser)) {
-      router.push("/login");
+      router.push("/sign-in");
     }
   }, [isLoading, currentUser]);
   return (
