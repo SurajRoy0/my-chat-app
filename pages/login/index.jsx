@@ -56,7 +56,7 @@ const Login = () => {
           </button>
         </form>
         <div className="flex justify-center gap-1 text-c3 mt-5">
-          <span>Are You New Here ? </span>
+          <span>Are You New Here? </span>
           <Link
             href="/register"
             className="font-semibold text-white underline underline-offset-2 cursor-pointer"
