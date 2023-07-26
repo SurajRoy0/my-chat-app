@@ -1,10 +1,40 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { IoLogoGoogle, IoLogoFacebook } from "react-icons/io";
 
+import { auth } from "@/firebase/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import useAuth from "@/Context/authContext";
+import { useRouter } from "next/router";
+
 const Login = () => {
-  return (
+  const { isLoading, currentUser } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && currentUser) {
+      router.push("/");
+    }
+  }, [isLoading, currentUser]);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const email = e.target[0].value;
+    const password = e.target[1].value;
+    if (email.length !== "" && password.length < 7) {
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return isLoading || (!isLoading && currentUser) ? (
+    "Loading..."
+  ) : (
     <div className="h-[100vh] flex justify-center items-center bg-c1">
       <div className="flex items-center flex-col ">
         <div className="text-center">
@@ -33,6 +63,7 @@ const Login = () => {
           <span className="w-5 h-[1px] bg-c3"></span>
         </div>
         <form
+          onSubmit={submitHandler}
           action=""
           className="flex flex-col items-center gap-3 w-[500px] mt-5"
         >
