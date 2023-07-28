@@ -15,6 +15,7 @@ import useAuth from "@/Context/authContext";
 import { useRouter } from "next/router";
 import ToastMessage from "@/components/alerts/ToastMessage";
 import { toast } from "react-toastify";
+import Loader from "@/components/Loader/Loader";
 
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
@@ -82,7 +83,7 @@ const SignIn = () => {
   };
 
   return isLoading || (!isLoading && currentUser) ? (
-    "Loading..."
+    <Loader />
   ) : (
     <div className="h-[100vh] flex justify-center items-center bg-c1">
       <ToastMessage />

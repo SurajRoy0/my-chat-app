@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { doc, setDoc } from "firebase/firestore";
 
 import { profileColors } from "@/utils/constant";
+import Loader from "@/components/Loader/Loader";
 
 const googleProvider = new GoogleAuthProvider();
 const facebookProvider = new FacebookAuthProvider();
@@ -82,7 +83,7 @@ const Register = () => {
   };
 
   return isLoading || (!isLoading && currentUser) ? (
-    "Loading..."
+    <Loader />
   ) : (
     <div className="h-[100vh] flex justify-center items-center bg-c1">
       <div className="flex items-center flex-col ">
