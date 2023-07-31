@@ -15,10 +15,12 @@ import { doc, updateDoc } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
 import { db, auth, storage } from "@/firebase/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import UsersPopUp from "../PopUps/UsersPopUp";
 
 const LeftNav = () => {
   const [editProfileOpen, setEditProfileOpen] = useState(false);
   const [nameEdited, setNameEdited] = useState(false);
+  const [isUsersPopUpOpen, setIsUsersPopUpOpen] = useState(false);
   const { currentUser, signOut, setCurrentUser } = useAuth();
 
   const authUser = auth?.currentUser;
@@ -165,7 +167,10 @@ const LeftNav = () => {
             />
           </div>
           {currentUser?.photoURL && (
-            <div className="w-6 h-6 rounded-full bg-red-500 flex justify-center items-center absolute right-0 bottom-0">
+            <div
+              onClick={() => updateProfileHandler("PHOTO_REMOVE")}
+              className="w-6 h-6 rounded-full bg-red-500 flex justify-center items-center absolute right-0 bottom-0"
+            >
               <MdDeleteForever size={14} />
             </div>
           )}
@@ -241,7 +246,7 @@ const LeftNav = () => {
           size={"x-large"}
           className={"bg-green-500 hover:bg-gray-600"}
           icon={<FiPlus size={24} />}
-          onclick={() => {}}
+          onclick={() => setIsUsersPopUpOpen(true)}
         />
         <Icon
           size={"x-large"}
@@ -250,6 +255,12 @@ const LeftNav = () => {
           onclick={signOut}
         />
       </div>
+      {isUsersPopUpOpen && (
+        <UsersPopUp
+          closePopUp={() => setIsUsersPopUpOpen(false)}
+          title="Find Users"
+        />
+      )}
     </div>
   );
 };
