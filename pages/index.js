@@ -24,7 +24,7 @@ const Home = () => {
               <Chats />
             </div>
           </div>
-          <div>Chats</div>
+          <div>Chat</div>
         </div>
       </div>
     </div>

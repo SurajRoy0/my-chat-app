@@ -4,16 +4,18 @@ import useAuth from "./authContext";
 
 const ChatContext = createContext();
 
-const INITIAL_STATE = {
-    chatId: "",
-    user: null
-}
-
-
 
 export const ChatContextProvider = ({ children }) => {
     const [users, setUsers] = useState(null)
+    const [chats, setChats] = useState([])
+    const [selectedChat, setSelectedChat] = useState(null)
+
     const { currentUser } = useAuth();
+
+    const INITIAL_STATE = {
+        chatId: "",
+        user: null
+    }
 
     const chatReducer = (state, action) => {
         switch (action.type) {
@@ -30,7 +32,7 @@ export const ChatContextProvider = ({ children }) => {
 
     const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
 
-    return (<ChatContext.Provider value={{ users, setUsers, data: state, dispatch }}>
+    return (<ChatContext.Provider value={{ users, setUsers, data: state, dispatch, chats, setChats, selectedChat, setSelectedChat }}>
         {children}
     </ChatContext.Provider>)
 }
