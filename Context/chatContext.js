@@ -9,6 +9,12 @@ export const ChatContextProvider = ({ children }) => {
     const [users, setUsers] = useState(null)
     const [chats, setChats] = useState([])
     const [selectedChat, setSelectedChat] = useState(null)
+    const [inputText, setInputText] = useState("");
+    const [attachment, setAttachment] = useState(null)
+    const [attachmentPreview, setAttachmentPreview] = useState(null);
+    const [editMessage, setEditMessage] = useState(null)
+    const [isTyping, setIsTyping] = useState(false)
+    const [imageViewer, setImageViewer] = useState(null)
 
     const { currentUser } = useAuth();
 
@@ -32,7 +38,7 @@ export const ChatContextProvider = ({ children }) => {
 
     const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
 
-    return (<ChatContext.Provider value={{ users, setUsers, data: state, dispatch, chats, setChats, selectedChat, setSelectedChat }}>
+    return (<ChatContext.Provider value={{ users, setUsers, data: state, dispatch, chats, setChats, selectedChat, setSelectedChat, inputText, setInputText, attachment, setAttachment, attachmentPreview, setAttachmentPreview, editMessage, setEditMessage, isTyping, setIsTyping, imageViewer, setImageViewer }}>
         {children}
     </ChatContext.Provider>)
 }

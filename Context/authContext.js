@@ -17,7 +17,7 @@ export const UserProvider = ({ children }) => {
                     isOnline: false,
                 })
             }
-            setCurrentUser(null)
+            setCurrentUser(null);
             setIsLoading(false);
         } catch (error) {
             console.log(error)

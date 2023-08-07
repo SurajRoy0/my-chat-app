@@ -9,7 +9,6 @@ import { formatDateConditionally } from "@/utils/formattedDate";
 
 const Chats = () => {
   const [search, setSearch] = useState("");
-  const [filteredChats, setFilteredChats] = useState([]);
   const {
     dispatch,
     users,
@@ -41,12 +40,12 @@ const Chats = () => {
     currentUser.uid && getChats();
   }, []);
 
-  useEffect(() => {
-    const filteredChatsResult = chats.filter(([, chat]) =>
+  const filteredChatsResult = chats
+    .filter(([, chat]) =>
       chat?.userInfo?.displayName.toLowerCase().includes(search.toLowerCase())
-    );
-    setFilteredChats(filteredChatsResult);
-  }, [search]);
+    )
+    .sort((a, b) => b[1].date - a[1].date);
+  console.log(chats);
 
   const selectedChatHandler = (user, selectedChatId) => {
     setSelectedChat(user);
@@ -67,7 +66,7 @@ const Chats = () => {
       </div>
       <ul className="flex flex-col w-full my-5 gap-[2px]">
         {Object.keys(users || {}).length > 0 &&
-          filteredChats?.map((chat) => {
+          filteredChatsResult?.map((chat) => {
             const timestamp = new Timestamp(
               chat[1]?.date?.seconds,
               chat[1]?.date?.nanoseconds
@@ -93,7 +92,7 @@ const Chats = () => {
                   <span className="text-base text-white flex items-center justify-between ">
                     <p className="text-sm text-c3 line-clamp-1 break-all">
                       {chat[1]?.lastMessage?.text ||
-                        (chat[1]?.lastMessage?.img && "Image") ||
+                        (chat[1]?.lastMessage?.imgURL && "Image") ||
                         "Send first message!"}
                     </p>
                     <span className="min-w-[20px] h-5 rounded-full bg-green-500 flex justify-center items-center">
