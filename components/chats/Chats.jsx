@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import useChatContext from "@/Context/chatContext";
-import { Timestamp, collection, doc, onSnapshot } from "firebase/firestore";
+import {
+  Timestamp,
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 import { RiSearch2Line } from "react-icons/ri";
 import Avatar from "../Header/Avatar";
@@ -9,6 +18,7 @@ import { formatDateConditionally } from "@/utils/formattedDate";
 
 const Chats = () => {
   const [search, setSearch] = useState("");
+  const [unreadMessages, setUnreadMessages] = useState({});
   const {
     dispatch,
     users,
@@ -17,9 +27,47 @@ const Chats = () => {
     setChats,
     selectedChat,
     setSelectedChat,
+    data,
+    setInputText,
+    setAttachment,
+    setAttachmentPreview,
+    setEditMessage,
+    setImageViewer,
   } = useChatContext();
 
   const { currentUser } = useAuth();
+
+  useEffect(() => {
+    const documentsIds = Object.keys(chats);
+    if (documentsIds.length === 0) return;
+
+    const q = query(
+      collection(db, "chats"),
+      where("__name__", "in", documentsIds)
+    );
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      let msgs = {};
+      snapshot?.forEach((doc) => {
+        if (doc.id !== data.chatId) {
+          msgs[doc.id] = doc?.data().messages?.filter((msg) => {
+            return (
+              msg?.read === false &&
+              msg?.deletedInfo?.deletedForEveryone !== true &&
+              msg?.sender !== currentUser.uid
+            );
+          });
+        }
+        Object.keys(msgs || {})?.map((c) => {
+          if (msgs[c]?.length < 1) {
+            delete msgs[c];
+          }
+        });
+      });
+      setUnreadMessages(msgs);
+    });
+    return () => unsub();
+  }, [chats, selectedChat]);
 
   useEffect(() => {
     onSnapshot(collection(db, "users"), (snapshot) => {
@@ -32,24 +80,49 @@ const Chats = () => {
     const getChats = () => {
       const unSub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
         if (doc.exists()) {
-          const data = Object.entries(doc.data() || {});
-          setChats(data);
+          setChats(doc.data());
         }
       });
     };
     currentUser.uid && getChats();
   }, []);
 
-  const filteredChatsResult = chats
+  const filteredChatsResult = Object.entries(chats || {})
     .filter(([, chat]) =>
       chat?.userInfo?.displayName.toLowerCase().includes(search.toLowerCase())
     )
     .sort((a, b) => b[1].date - a[1].date);
-  console.log(chats);
+
+  const readChatHandler = async (selectedChatId) => {
+    const chatRef = doc(db, "chats", selectedChatId);
+    const chatDoc = await getDoc(chatRef);
+
+    const updatedMessages = chatDoc?.data()?.messages?.map((msg) => {
+      if (msg?.read === false) {
+        msg.read = true;
+      }
+
+      return msg;
+    });
+
+    await updateDoc(chatRef, {
+      messages: updatedMessages,
+    });
+  };
 
   const selectedChatHandler = (user, selectedChatId) => {
+    setInputText("");
+    setAttachment(null);
+    setAttachmentPreview(null);
+    setEditMessage(null);
+    setImageViewer(null);
     setSelectedChat(user);
+
     dispatch({ type: "CHANGE_USER", payload: user });
+
+    if (unreadMessages?.[selectedChatId]?.length > 0) {
+      readChatHandler(selectedChatId);
+    }
   };
 
   return (
@@ -95,9 +168,11 @@ const Chats = () => {
                         (chat[1]?.lastMessage?.imgURL && "Image") ||
                         "Send first message!"}
                     </p>
-                    <span className="min-w-[20px] h-5 rounded-full bg-green-500 flex justify-center items-center">
-                      5
-                    </span>
+                    {!!unreadMessages?.[chat[0]]?.length && (
+                      <span className="min-w-[20px] h-5 rounded-full bg-green-500 flex justify-center items-center">
+                        {unreadMessages?.[chat[0]]?.length}
+                      </span>
+                    )}
                   </span>
                 </div>
               </li>
