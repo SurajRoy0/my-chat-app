@@ -1,13 +1,19 @@
 import useAuth from "@/Context/authContext";
 import useChatContext from "@/Context/chatContext";
 import { db } from "@/firebase/firebase";
-import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 import React from "react";
 import ClickAwayListener from "react-click-away-listener";
 
 const ChatMenu = ({ setShowMenu }) => {
   const { currentUser } = useAuth();
-  const { data, users } = useChatContext();
+  const { data, users, dispatch } = useChatContext();
 
   const isUserBlocked = users[currentUser.uid].blockedUsers?.find(
     (user) => user === data.user.uid
@@ -34,11 +40,45 @@ const ChatMenu = ({ setShowMenu }) => {
       });
     }
   };
+
+  const chatDeleteHandler = async () => {
+    try {
+      const chatRef = doc(db, "chats", data.chatId);
+      const chatDoc = await getDoc(chatRef);
+
+      const updatedMessages = chatDoc?.data()?.messages?.map((msg) => {
+        msg.deleteChatInfo = {
+          ...msg.deleteChatInfo,
+          [currentUser.uid]: true,
+        };
+        return msg;
+      });
+      await updateDoc(chatRef, {
+        messages: updatedMessages,
+      });
+
+      await updateDoc(doc(db, "userChats", currentUser.uid), {
+        [data.chatId + ".chatDeleted"]: true,
+      });
+
+      dispatch({ type: "INITIAL_STATE" });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ClickAwayListener onClickAway={clickAwayHandler}>
       <div className="w-[200px] absolute top-[70px] right-5 bg-c0 z-10 rounded-md overflow-hidden">
         <ul className="flex flex-col py-2">
-          <li className="flex items-center py-3 px-5 hover:bg-black cursor-pointer">
+          <li
+            onClick={(e) => {
+              e.stopPropagation();
+              chatDeleteHandler();
+              setShowMenu(false);
+            }}
+            className="flex items-center py-3 px-5 hover:bg-black cursor-pointer"
+          >
             Delete Chat
           </li>
           {!isCurrentUserBlocked && (

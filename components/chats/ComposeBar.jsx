@@ -26,6 +26,7 @@ const ComposeBar = () => {
     setAttachment,
     editMessage,
     setEditMessage,
+    dispatch,
   } = useChatContext();
   const { currentUser } = useAuth();
 
@@ -119,12 +120,15 @@ const ComposeBar = () => {
     await updateDoc(doc(db, "userChats", currentUser.uid), {
       [data.chatId + ".lastMessage"]: msg,
       [data.chatId + ".date"]: serverTimestamp(),
+      [data.chatId + ".chatDeleted"]: false,
     });
 
     await updateDoc(doc(db, "userChats", data.user.uid), {
       [data.chatId + ".lastMessage"]: msg,
       [data.chatId + ".date"]: serverTimestamp(),
+      [data.chatId + ".chatDeleted"]: false,
     });
+
     setInputText("");
     setAttachment(null);
     setAttachmentPreview(null);

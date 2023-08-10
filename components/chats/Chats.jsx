@@ -88,6 +88,10 @@ const Chats = () => {
   }, []);
 
   const filteredChatsResult = Object.entries(chats || {})
+    .filter(
+      ([, chat]) =>
+        !chat.hasOwnProperty("chatDeleted") || chat.chatDeleted !== true
+    )
     .filter(([, chat]) =>
       chat?.userInfo?.displayName.toLowerCase().includes(search.toLowerCase())
     )
