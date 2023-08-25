@@ -24,6 +24,7 @@ const Message = ({ msg }) => {
 
   const timestamp = new Timestamp(msg?.date?.seconds, msg?.date?.nanoseconds);
   const date = timestamp.toDate();
+  const screenWidth = window.innerWidth;
 
   const deletePopupHandler = () => {
     setShowDeletePopup(true);
@@ -101,8 +102,8 @@ const Message = ({ msg }) => {
             <>
               <Image
                 src={msg.imgURL}
-                width={250}
-                height={250}
+                width={screenWidth <=786 ? 130 : 250}
+                height={screenWidth <=786 ? 130 : 250}
                 alt={msg?.text || ""}
                 onClick={() =>
                   setImageViewer({

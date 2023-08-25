@@ -5,7 +5,7 @@ import { IoClose } from "react-icons/io5";
 const PopUpWrapper = (props) => {
   return (
     <div
-      className={`fixed top-0 left-0 z-20 w-full h-full flex items-center justify-center`}
+      className={`fixed top-0 left-0 z-20 w-full h-full p-7 flex items-center justify-center `}
     >
       <div
         className="w-full h-full absolute glass-effect"

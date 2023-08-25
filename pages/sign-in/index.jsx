@@ -1,8 +1,6 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-
 import { IoLogoGoogle, IoLogoFacebook } from "react-icons/io";
-
 import { auth } from "@/firebase/firebase";
 import {
   signInWithEmailAndPassword,
@@ -85,19 +83,17 @@ const SignIn = () => {
   return isLoading || (!isLoading && currentUser) ? (
     <Loader />
   ) : (
-    <div className="h-[100vh] flex justify-center items-center bg-c1">
+    <div className="h-screen flex justify-center items-center bg-c1">
       <ToastMessage />
-      <div className="flex items-center flex-col ">
-        <div className="text-center">
+      <div className="flex items-center flex-col w-full p-5">
+        <div className="text-center mb-5">
           <div className="text-4xl font-bold">Login To Your Account</div>
-          <div className="mt-3 text-c3">
-            Chat with anyone, anytime and anywhere
-          </div>
+          <div className="mt-3 text-c3">Chat with anyone, anytime and anywhere</div>
         </div>
-        <div className="flex items-center gap-2 w-full mt-10 mb-5">
+        <div className="flex flex-col gap-2 w-full mb-5 md:max-w-lg md:flex-row">
           <div
             onClick={signInWithGoogle}
-            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-full md:w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
           >
             <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
               <IoLogoGoogle size={24} />
@@ -106,7 +102,7 @@ const SignIn = () => {
           </div>
           <div
             onClick={signInWithFacebook}
-            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-full md:w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
           >
             <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
               <IoLogoFacebook size={24} />
@@ -119,11 +115,7 @@ const SignIn = () => {
           <span className="text-c3 font-semibold">OR</span>
           <span className="w-5 h-[1px] bg-c3"></span>
         </div>
-        <form
-          onSubmit={submitHandler}
-          action=""
-          className="flex flex-col items-center gap-3 w-[500px] mt-5"
-        >
+        <form onSubmit={submitHandler} action="" className="flex flex-col gap-3 w-full md:max-w-md">
           <input
             type="email"
             placeholder="Email"
@@ -143,16 +135,13 @@ const SignIn = () => {
               Forgot Password?
             </span>
           </div>
-          <button className="mt-4 w-full h-14 rounded-xl outline-none text-base font-semibold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 ">
+          <button className="mt-4 w-full h-14 rounded-xl outline-none text-base font-semibold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
             Login To Your Account
           </button>
         </form>
         <div className="flex justify-center gap-1 text-c3 mt-5">
           <span>Are You New Here? </span>
-          <Link
-            href="/register"
-            className="font-semibold text-white underline underline-offset-2 cursor-pointer"
-          >
+          <Link href="/register" className="font-semibold text-white underline underline-offset-2 cursor-pointer">
             Register Now
           </Link>
         </div>

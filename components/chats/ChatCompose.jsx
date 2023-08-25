@@ -11,6 +11,7 @@ import { MdDeleteForever } from "react-icons/md";
 
 const ChatCompose = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const screenWidth = window.innerWidth;
   const {
     isTyping,
     editMessage,
@@ -83,6 +84,9 @@ const ChatCompose = () => {
                   setInputText((prevText) => (prevText += emojiData.emoji))
                 }
                 autoFocusSearch={false}
+                
+                height={screenWidth <= 768 ? 400 : 450}
+                width={screenWidth <= 768 ? 272 : 350}
               />
             </div>
           </ClickAwayListener>

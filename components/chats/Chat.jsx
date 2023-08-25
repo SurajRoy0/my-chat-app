@@ -19,7 +19,7 @@ const Chat = () => {
 
   console.log(isCurrentUserBlocked, isUserBlocked);
   return (
-    <div className="flex flex-col p-5 grow">
+    <div className={` flex flex-col p-5 grow h-screen`}>
       <ChatHeader />
       {data.chatId && <Messages />}
 

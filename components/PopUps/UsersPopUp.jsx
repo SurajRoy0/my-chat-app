@@ -70,6 +70,7 @@ const UsersPopUp = (props) => {
       }
       dispatch({ type: "CHANGE_USER", payload: user });
       props.closePopUp();
+      
     } catch (error) {
       console.log(error);
     }

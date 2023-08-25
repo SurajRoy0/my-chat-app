@@ -18,6 +18,7 @@ import { formatDateConditionally } from "@/utils/formattedDate";
 
 const Chats = () => {
   const [search, setSearch] = useState("");
+
   const [unreadMessages, setUnreadMessages] = useState({});
   const {
     dispatch,
@@ -130,7 +131,7 @@ const Chats = () => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className={`flex flex-col h-full`}>
       <div className="shrink-0 sticky -top-[20px] z-10 flex justify-center w-full bg-c2 py-5">
         <RiSearch2Line className="absolute top-9 left-4 text-c3" />
         <input
@@ -155,7 +156,7 @@ const Chats = () => {
                 key={chat[0]}
                 onClick={() => selectedChatHandler(user, chat[0])}
                 className={`h-[60px] flex items-center gap-4 rounded-xl hover:bg-c1 p-4 cursor-pointer ${
-                  selectedChat?.uid === user?.uid ? "bg-c1" : ""
+                  selectedChat?.uid === user?.uid && data?.user? "md:bg-c1" : ""
                 }`}
               >
                 <Avatar size="large" user={user} />

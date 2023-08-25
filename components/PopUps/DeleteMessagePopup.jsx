@@ -23,9 +23,9 @@ const DeleteMessagePopup = (props) => {
         </div>
         <div className="flex items-center justify-center gap-3">
           <RiErrorWarningLine size={24} className="text-red-500" />
-          <div className="text-lg">Are you sure, want to delete message?</div>
+          <div className="md:text-lg text-base">Are you sure, want to delete message?</div>
         </div>
-        <div className="flex items-center justify-center gap-2 mt-10">
+        <div className="flex md:flex-row flex-col items-center justify-center gap-3 md:gap-2 md:mt-10 mt-5">
           <button
             onClick={() => {
               props.deleteMessageHandler(DELETED_FOR_ME);
@@ -39,7 +39,7 @@ const DeleteMessagePopup = (props) => {
               onClick={() => {
                 props.deleteMessageHandler(DELETED_FOR_EVERYONE);
               }}
-              className="border-[2px] w-[170px] border-red-700 py-2 px-4 text-sm rounded-md text-red-500 hover:bg-red-700 hover:text-white"
+              className="border-[2px] md:w-[170px] border-red-700 py-2 px-4  text-sm rounded-md text-red-500 hover:bg-red-700 hover:text-white"
             >
               Delete for everyone
             </button>

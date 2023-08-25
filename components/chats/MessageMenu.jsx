@@ -20,7 +20,7 @@ const MessageMenu = ({
     <ClickAwayListener onClickAway={clickAwayHandler}>
       <div
         ref={ref}
-        className={`w-[200px] absolute top-8 ${
+        className={`md:w-[200px] w-[130px] absolute top-8 ${
           self ? "right-0" : "top-0"
         } bg-c0 z-10 rounded-md overflow-hidden`}
       >
@@ -32,7 +32,7 @@ const MessageMenu = ({
                 setEditMessage();
                 setShowMenu(false);
               }}
-              className="flex items-center py-3 px-5 hover:bg-black cursor-pointer"
+              className="flex items-center md:py-3 md:px-5 py-1 px-2 md:text-base text-[14px] hover:bg-black cursor-pointer"
             >
               Edit Message
             </li>
@@ -42,7 +42,7 @@ const MessageMenu = ({
               e.stopPropagation();
               deletePopupHandler(true);
             }}
-            className="flex items-center py-3 px-5 hover:bg-black cursor-pointer"
+            className="flex items-centermd:py-3 md:px-5 py-1 px-2 md:text-base text-[14px] hover:bg-black cursor-pointer"
           >
             Delete Message
           </li>

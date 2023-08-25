@@ -14,6 +14,7 @@ import React, { useEffect } from "react";
 import { TbSend } from "react-icons/tb";
 import { v4 as uuid } from "uuid";
 
+
 let typingTimeout = null;
 
 const ComposeBar = () => {
@@ -26,7 +27,6 @@ const ComposeBar = () => {
     setAttachment,
     editMessage,
     setEditMessage,
-    dispatch,
   } = useChatContext();
   const { currentUser } = useAuth();
 

@@ -16,12 +16,15 @@ import { updateProfile } from "firebase/auth";
 import { db, auth, storage } from "@/firebase/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import UsersPopUp from "../PopUps/UsersPopUp";
+import useChatContext from "@/Context/chatContext";
 
-const LeftNav = () => {
+const LeftNav = ({setIsEditProfileOpen}) => {
   const [editProfileOpen, setEditProfileOpen] = useState(false);
   const [nameEdited, setNameEdited] = useState(false);
   const [isUsersPopUpOpen, setIsUsersPopUpOpen] = useState(false);
   const { currentUser, signOut, setCurrentUser } = useAuth();
+
+  const { data } = useChatContext();
 
   const authUser = auth?.currentUser;
 
@@ -141,13 +144,15 @@ const LeftNav = () => {
 
   const editProfileContainer = () => {
     return (
-      <div className="relative flex flex-col items-center">
+      <div className="relative flex flex-col  items-center">
         <ToastMessage />
         <Icon
           size={"small"}
           className="absolute top-0 right-5 hover:bg-c2"
           icon={<IoClose size={20} />}
-          onclick={() => setEditProfileOpen(false)}
+          onclick={() => {
+            setIsEditProfileOpen(false)
+            setEditProfileOpen(false)}}
         />
         <div className="relative group cursor-pointer">
           <Avatar size="x-large" user={currentUser} />
@@ -191,7 +196,7 @@ const LeftNav = () => {
             )}
             <div
               className="bg-transparent outline-none border-none text-center"
-              contentEditable
+              contentEditable={true}
               id="displayNameEdit"
               onKeyUp={onKeyUpHandler}
               onKeyDown={onKeyDownHandler}
@@ -220,26 +225,37 @@ const LeftNav = () => {
   return (
     <div
       className={`${
-        editProfileOpen ? "w-[350px]" : "w-[80px] items-center"
-      } flex flex-col justify-between py-5 shrink-0 transition-all`}
+        editProfileOpen
+          ? "md:w-[350px] w-full h-screen flex-col"
+          : "md:w-[80px] items-end md:items-center flex-row md:flex-col"
+      } flex justify-between md:py-5 py-3 px-5 md:px-0 shrink-0 transition-all ${data?.user && "hidden md:flex" }`}
     >
       {editProfileOpen ? (
         editProfileContainer()
       ) : (
-        <div
-          className="relative group cursor-pointer"
-          onClick={() => setEditProfileOpen(true)}
-        >
-          <Avatar size="large" user={currentUser} />
-          <div className="w-full h-full rounded-full bg-black/[0.5] absolute top-0 left-0 justify-center items-center hidden group-hover:flex">
-            <BiEdit size={14} />
+        <>
+          <div className="md:hidden flex items-center justify-center h-full">
+            <h1 className="text-lg">MY CHAT</h1>
           </div>
-        </div>
+          <div
+            className="relative group cursor-pointer"
+            onClick={() => {
+              setIsEditProfileOpen(true)
+              setEditProfileOpen(true)}}
+          >
+            <Avatar size="large" user={currentUser} />
+            <div className="w-full h-full rounded-full bg-black/[0.5] absolute top-0 left-0 justify-center items-center hidden group-hover:flex">
+              <BiEdit size={14} />
+            </div>
+          </div>
+        </>
       )}
 
       <div
         className={`${
-          editProfileOpen ? "ml-5" : "flex-col items-center"
+          editProfileOpen
+            ? "ml-5 block"
+            : "flex-row md:flex-col hidden md:block items-center"
         } flex gap-5`}
       >
         <Icon
@@ -257,7 +273,10 @@ const LeftNav = () => {
       </div>
       {isUsersPopUpOpen && (
         <UsersPopUp
-          closePopUp={() => setIsUsersPopUpOpen(false)}
+          closePopUp={() => {
+            setEditProfileOpen(false);
+            setIsUsersPopUpOpen(false);
+          }}
           title="Find Users"
         />
       )}

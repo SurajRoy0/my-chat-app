@@ -85,18 +85,18 @@ const Register = () => {
   return isLoading || (!isLoading && currentUser) ? (
     <Loader />
   ) : (
-    <div className="h-[100vh] flex justify-center items-center bg-c1">
-      <div className="flex items-center flex-col ">
+    <div className="h-screen flex justify-center items-center bg-c1">
+      <div className="flex items-center flex-col w-full p-5">
         <div className="text-center">
           <div className="text-4xl font-bold">Create New Account</div>
           <div className="mt-3 text-c3">
             Chat with anyone, anytime and anywhere
           </div>
         </div>
-        <div className="flex items-center gap-2 w-full mt-10 mb-5">
+        <div className="flex flex-col items-center gap-2 w-full md:max-w-lg md:flex-row  mt-10 mb-5">
           <div
             onClick={signInWithGoogle}
-            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 w-full to-pink-500 md:w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
           >
             <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
               <IoLogoGoogle size={24} />
@@ -105,7 +105,7 @@ const Register = () => {
           </div>
           <div
             onClick={signInWithFacebook}
-            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-full md:w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
           >
             <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
               <IoLogoFacebook size={24} />
@@ -121,7 +121,7 @@ const Register = () => {
         <form
           onSubmit={submitHandler}
           action=""
-          className="flex flex-col items-center gap-3 w-[500px] mt-5"
+          className="flex flex-col items-center gap-3 w-full md:max-w-md mt-5"
         >
           <input
             type="text"
