@@ -1,11 +1,10 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { IoLogoGoogle, IoLogoFacebook } from "react-icons/io";
+import { IoLogoGoogle } from "react-icons/io";
 import { auth } from "@/firebase/firebase";
 import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  FacebookAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
 } from "firebase/auth";
@@ -16,7 +15,6 @@ import { toast } from "react-toastify";
 import Loader from "@/components/Loader/Loader";
 
 const googleProvider = new GoogleAuthProvider();
-const facebookProvider = new FacebookAuthProvider();
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -52,13 +50,6 @@ const SignIn = () => {
     }
   };
 
-  const signInWithFacebook = async () => {
-    try {
-      await signInWithPopup(auth, facebookProvider);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const resetPasswordHandler = async () => {
     try {
@@ -90,23 +81,14 @@ const SignIn = () => {
           <div className="text-4xl font-bold">Login To Your Account</div>
           <div className="mt-3 text-c3">Chat with anyone, anytime and anywhere</div>
         </div>
-        <div className="flex flex-col gap-2 w-full mb-5 md:max-w-lg md:flex-row">
+        <div className="flex w-full md:max-w-md">
           <div
             onClick={signInWithGoogle}
-            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-full md:w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-full h-14 rounded-md cursor-pointer p-[1px]"
           >
             <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
               <IoLogoGoogle size={24} />
               <span>Sign Up With Google</span>
-            </div>
-          </div>
-          <div
-            onClick={signInWithFacebook}
-            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-full md:w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
-          >
-            <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
-              <IoLogoFacebook size={24} />
-              <span>Sign Up With Facebook</span>
             </div>
           </div>
         </div>

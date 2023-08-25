@@ -1,13 +1,12 @@
 import Link from "next/link";
 import React, { useEffect } from "react";
 
-import { IoLogoGoogle, IoLogoFacebook } from "react-icons/io";
+import { IoLogoGoogle } from "react-icons/io";
 
 import { auth, db } from "@/firebase/firebase";
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  FacebookAuthProvider,
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
@@ -19,7 +18,6 @@ import { profileColors } from "@/utils/constant";
 import Loader from "@/components/Loader/Loader";
 
 const googleProvider = new GoogleAuthProvider();
-const facebookProvider = new FacebookAuthProvider();
 
 const Register = () => {
   const { isLoading, currentUser } = useAuth();
@@ -74,14 +72,6 @@ const Register = () => {
     }
   };
 
-  const signInWithFacebook = async () => {
-    try {
-      await signInWithPopup(auth, facebookProvider);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return isLoading || (!isLoading && currentUser) ? (
     <Loader />
   ) : (
@@ -93,25 +83,17 @@ const Register = () => {
             Chat with anyone, anytime and anywhere
           </div>
         </div>
-        <div className="flex flex-col items-center gap-2 w-full md:max-w-lg md:flex-row  mt-10 mb-5">
+        <div className="flex w-full md:max-w-md">
           <div
             onClick={signInWithGoogle}
-            className="bg-gradient-to-r from-indigo-500 via-purple-500 w-full to-pink-500 md:w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 w-full to-pink-500 h-14 rounded-md cursor-pointer p-[1px]"
           >
             <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
               <IoLogoGoogle size={24} />
               <span>Sign Up With Google</span>
             </div>
           </div>
-          <div
-            onClick={signInWithFacebook}
-            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 w-full md:w-1/2 h-14 rounded-md cursor-pointer p-[1px]"
-          >
-            <div className="flex items-center justify-center gap-3 text-white font-semibold bg-c1 w-full h-full rounded-md">
-              <IoLogoFacebook size={24} />
-              <span>Sign Up With Facebook</span>
-            </div>
-          </div>
+        
         </div>
         <div className="flex items-center gap-1">
           <span className="w-5 h-[1px] bg-c3"></span>
