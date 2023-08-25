@@ -1,10 +1,10 @@
 
-import useAuth from '@/Context/authContext';
-import useChatContext from '@/Context/chatContext';
-import LeftNav from '@/components/Header/LeftNav';
-import Loader from '@/components/Loader/Loader';
-import Chats from '@/components/chats/Chats';
-import Chat from '@/components/chats/chat';
+import useAuth from '../Context/authContext';
+import useChatContext from '../Context/chatContext';
+import LeftNav from '../components/Header/LeftNav';
+import Loader from '../components/Loader/Loader';
+import Chats from '../components/chats/Chats';
+import Chat from '../components/chats/Chats';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 
