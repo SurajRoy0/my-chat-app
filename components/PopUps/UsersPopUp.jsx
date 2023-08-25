@@ -16,6 +16,7 @@ import Search from "../SearchBar/Search";
 const UsersPopUp = (props) => {
   const { currentUser } = useAuth();
   const { users, dispatch } = useChatContext();
+  console.log(users)
 
   const selectUserHandler = async (user) => {
     try {
@@ -83,7 +84,8 @@ const UsersPopUp = (props) => {
         <div className="absolute w-full">
           {users &&
             Object.values(users).map((user) => (
-              <div
+            user.uid != currentUser.uid && <div
+                key={user.uid}
                 onClick={() => selectUserHandler(user)}
                 className="flex items-center gap-4 rounded-full hover:bg-c5 py-2 px-4 cursor-pointer"
               >
